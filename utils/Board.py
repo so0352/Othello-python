@@ -21,6 +21,14 @@ class Board():
         ])
         
         return
+    # おくことができる駒の座標リスト
+    def show_available_coordinates(self, first_move: bool) -> list:
+        ans_list = []
+        for i in range(8):
+            for j in range(8):
+                if self.check_flip(i, j, first_move=first_move) != []:
+                    ans_list.append((i, j))
+        return ans_list
     
     # 盤面に駒を置く + 駒をひっくり返す
     def add_piece(self, y: int, x: int, first_move: bool) -> bool:
