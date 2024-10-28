@@ -22,7 +22,7 @@ class Board():
         
         return
     
-    # 盤面に駒を置く
+    # 盤面に駒を置く + 駒をひっくり返す
     def add_piece(self, y: int, x: int, first_move: bool) -> bool:
             if self.board[y, x] != 0:
                 return False
@@ -30,15 +30,30 @@ class Board():
             if first_move:
                 if self.check_flip(y, x, first_move=first_move) == []:
                     return False
+                # 駒をひっくり返す
+                self.flip_pieces(y, x, first_move=first_move, check_flip_list=self.check_flip(y, x, first_move=first_move))
                 self.board[y, x] = 1
             # 後手の時
             else:
                 if self.check_flip(y, x, first_move=first_move) == []:
-                    raise ValueError("後手の駒を置くことができません。")
+                    return False
+                # 駒をひっくり返す
+                self.flip_pieces(y, x, first_move=first_move, check_flip_list=self.check_flip(y, x, first_move=first_move))
                 self.board[y, x] = 2
             return True
-
-
+    
+    # 駒をひっくり返す
+    def flip_pieces(self, y: int, x: int, first_move: bool, check_flip_list: list) -> None:
+        for (dy, dx), pieces_num in check_flip_list:
+            cur_x, cur_y = x, y
+            for _ in range(pieces_num):
+                cur_x += dx
+                cur_y += dy
+                if first_move:
+                    self.board[cur_y, cur_x] = 1
+                else:
+                    self.board[cur_y, cur_x] = 2
+                    
     # 盤面の状態を表示する
     def show(self) -> None:
         print("何もない:. 先手の駒:o 後手の駒:x")

@@ -7,7 +7,7 @@ if __name__ == "__main__":
     bd = Board()
     print(bd.show())
     first_move = False  
-    if bd.add_piece(3, 2, first_move):
+    if bd.add_piece(2, 3, first_move):
        pass
     else:
         print("駒を置くことができません。")
