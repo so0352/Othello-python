@@ -79,6 +79,7 @@ class Board():
         return
     
     # それぞれの方向に対して何枚ひっくり返せるかを調べる
+    # 座標はひっくり返せる方向を表すベクトル
     def check_flip(self, y: int, x: int, first_move: bool) -> list:
         if self.board[y, x] != 0:
             return []
