@@ -32,34 +32,53 @@ def input_coordinate(board: Board, first_move: bool):
             print("\nプログラムを終了します。")
             sys.exit()
 
+def select_algorithm(algorithm_num):
+    if algorithm_num == 0:
+        return max_frip
+    else:
+        print("エラー: そのアルゴリズムは存在しません.")
+        sys.exit()
+
 
 def main():
     print("オセロゲームを開始します．")
     first_move = True if int(input("先手なら0,後手なら1を入力してください. \n")) == 0 else False
+    algorithm_num = int(input("使用するアルゴリズムを選択してください. \n"))
+    algorithm = select_algorithm(algorithm_num)
     board = Board(first_move=first_move)
     board.show()
     start_num, next_num = board.count_pieces()
+
+    pass_and_pass = False
     print(f"先手: {start_num} 後手: {next_num}")
 
     # 人間が先手なら
     if first_move:
         while True:
+            pass_and_pass = False
             # 人間側
             if board.show_available_coordinates(first_move) == []:
                 print("あなたはパスします.")
+                pass_and_pass = True
                 first_move = False # AIの手番に移る
             else:   
                 input_coordinate(board=board, first_move=first_move)
                 first_move = False # AIの手番に移る
             # AI側
-            (max_y, max_x), max_frip_num = max_frip(board, board.show_available_coordinates(first_move), first_move) # 最適手を取得
+            (max_y, max_x), max_frip_num = algorithm(board, board.show_available_coordinates(first_move), first_move) # 最適手を取得
             if max_frip_num == 0:
                 print("AIはパスします.")
+                if pass_and_pass:
+                    print("ゲーム終了")
+                    break
                 first_move = True # 人間の手番に移る
             else:
                 print(f"AIの手: {max_y} {max_x}", f"ひっくり返す数: {max_frip_num}")
                 if max_frip_num == -1:
                     print("AIはパスします.")
+                    if pass_and_pass: 
+                        print("ゲーム終了")
+                        break
                     first_move = True # 人間の手番に移る
                 else:
                     add_return = board.add_piece(max_y, max_x, first_move)
@@ -85,15 +104,18 @@ def main():
     # AIが先手なら   
     elif first_move == False:
         while True:
+            pass_and_pass = False
             # AI側
-            (max_y, max_x), max_frip_num = max_frip(board, board.show_available_coordinates(first_move), first_move) # 最適手を取得
+            (max_y, max_x), max_frip_num = algorithm(board, board.show_available_coordinates(first_move), first_move) # 最適手を取得
             if max_frip_num == 0:
                 print("AIはパスします.")
+                pass_and_pass = True
                 first_move = True # 人間の手番に移る
             else:
                 print(f"AIの手: {max_y} {max_x}", f"ひっくり返す数: {max_frip_num}")
                 if max_frip_num == -1:
                     print("AIはパスします.")
+                    pass_and_pass = True
                     first_move = True
                 else:
                     add_return = board.add_piece(max_y, max_x, first_move)
@@ -110,6 +132,9 @@ def main():
             # 人間側
             if board.show_available_coordinates(first_move) == []:
                 print("あなたはパスします.")
+                if pass_and_pass:
+                    print("ゲーム終了")
+                    break
                 first_move = False # AIの手番に移る
             else:   
                 input_coordinate(board=board, first_move=first_move)
