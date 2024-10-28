@@ -19,6 +19,8 @@ def input_coordinate(board: Board, first_move: bool):
                 else:
                     print("駒を置きました。")
                     board.show()
+                    start_num, next_num = board.count_pieces()
+                    print(f"先手: {start_num} 後手: {next_num}")
                     break
             else:
                 print("エラー: 0~7の整数で入力してください。")
@@ -36,6 +38,8 @@ def main():
     first_move = True if int(input("先手なら0,後手なら1を入力してください. \n")) == 0 else False
     board = Board(first_move=first_move)
     board.show()
+    start_num, next_num = board.count_pieces()
+    print(f"先手: {start_num} 後手: {next_num}")
 
     # 人間が先手なら
     if first_move:
@@ -66,11 +70,15 @@ def main():
                     else:
                         print("AIの手を置きました.")
                         board.show()
+                        start_num, next_num = board.count_pieces()
+                        print(f"先手: {start_num} 後手: {next_num}")
                         first_move = True # 人間の手番に移る
 
             # ゲーム終了判定
             if board.finished:
                 board.show()
+                start_num, next_num = board.count_pieces()
+                print(f"先手: {start_num} 後手: {next_num}")
                 print("ゲーム終了")
                 break
     
@@ -95,6 +103,8 @@ def main():
                     else:
                         print("AIの手を置きました.")
                         board.show()
+                        start_num, next_num = board.count_pieces()
+                        print(f"先手: {start_num} 後手: {next_num}")
                         first_move = True # 人間の手番に移る
             
             # 人間側
@@ -108,6 +118,8 @@ def main():
             # ゲーム終了判定
             if board.finished:
                 board.show()
+                start_num, next_num = board.count_pieces()
+                print(f"先手: {start_num} 後手: {next_num}")
                 print("ゲーム終了")
                 break
 

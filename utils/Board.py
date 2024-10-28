@@ -148,3 +148,8 @@ class Board():
                 ans_list.append(((dy, dx), piece_num))
         return ans_list
 
+    # start next の数を返す
+    def count_pieces(self) -> tuple:
+        start_num = np.sum(self.board == 1)
+        next_num = np.sum(self.board == 2)
+        return start_num, next_num
