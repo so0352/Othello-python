@@ -65,9 +65,9 @@ class Board():
     # 盤面の状態を表示する
     def show(self) -> None:
         print("何もない:. 先手の駒:o 後手の駒:x")
-        print('  a b c d e f g h')
+        print('  0 1 2 3 4 5 6 7')
         for i in range(8):
-            print(i + 1, end=' ')
+            print(i, end=' ')
             for j in range(8):
                 if self.board[i, j] == 0:
                     print('.', end=' ')
