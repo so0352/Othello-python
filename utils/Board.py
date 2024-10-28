@@ -8,6 +8,7 @@ class Board():
         self.board[3, 4] = self.board[4, 3] = 2 # 後手
         self.passed = False
         self.finished = False
+        self.turns = 0
 
         self.evaluation_matrix = np.array([
             [100, -20, 10, 5, 5, 10, -20, 100],
@@ -21,6 +22,13 @@ class Board():
         ])
         
         return
+
+    # 規定ターン数を超えたかどうか判定
+    def is_finished(self) -> bool:
+        if self.turns == 64: # 64手目で終了 8 * 8盤面より
+            self.finished = True
+        return self.finished
+    
     # おくことができる駒の座標リスト
     def show_available_coordinates(self, first_move: bool) -> list:
         ans_list = []
@@ -28,6 +36,9 @@ class Board():
             for j in range(8):
                 if self.check_flip(i, j, first_move=first_move) != []:
                     ans_list.append((i, j))
+        # passの処理
+        if ans_list == []:
+            self.passed = True
         return ans_list
     
     # 盤面に駒を置く + 駒をひっくり返す
@@ -48,6 +59,8 @@ class Board():
                 # 駒をひっくり返す
                 self.flip_pieces(y, x, first_move=first_move, check_flip_list=self.check_flip(y, x, first_move=first_move))
                 self.board[y, x] = 2
+            
+            self.turns += 1 # ターンを進める
             return True
     
     # 駒をひっくり返す
