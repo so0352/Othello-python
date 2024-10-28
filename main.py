@@ -6,6 +6,10 @@ def main():
 if __name__ == "__main__":
     bd = Board()
     print(bd.show())
-    result = bd.check_flip(2, 3, False)
-    print(result)
-    print(bd.evaluation_matrix)
+    first_move = False  
+    if bd.add_piece(3, 2, first_move):
+       pass
+    else:
+        print("駒を置くことができません。")
+    
+    print(bd.show())

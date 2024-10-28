@@ -18,9 +18,26 @@ class Board():
             [10, -2, 5, 1, 1, 5, -2, 10],
             [-20, -50, -2, -2, -2, -2, -50, -20],
             [100, -20, 10, 5, 5, 10, -20, 100]
-    ])
+        ])
         
         return
+    
+    # 盤面に駒を置く
+    def add_piece(self, y: int, x: int, first_move: bool) -> bool:
+            if self.board[y, x] != 0:
+                return False
+            # 先手の時
+            if first_move:
+                if self.check_flip(y, x, first_move=first_move) == []:
+                    return False
+                self.board[y, x] = 1
+            # 後手の時
+            else:
+                if self.check_flip(y, x, first_move=first_move) == []:
+                    raise ValueError("後手の駒を置くことができません。")
+                self.board[y, x] = 2
+            return True
+
 
     # 盤面の状態を表示する
     def show(self) -> None:
