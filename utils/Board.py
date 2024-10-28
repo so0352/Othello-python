@@ -2,12 +2,13 @@ import numpy as np
 
 # オセロの盤面情報を保持するクラス
 class Board():
-    def __init__(self) -> None:
+    def __init__(self, first_move: bool) -> None:
         self.board = np.zeros((8, 8), dtype=np.int8)
         self.board[3, 3] = self.board[4, 4] = 1 # 先手
         self.board[3, 4] = self.board[4, 3] = 2 # 後手
-        self.passed = False
+        #self.passed = False # 入れなくていい　一応残しとく
         self.finished = False
+        self.start_first_move = first_move
         self.turns = 0
 
         self.evaluation_matrix = np.array([
@@ -21,7 +22,6 @@ class Board():
             [100, -20, 10, 5, 5, 10, -20, 100]
         ])
         
-        return
 
     # 規定ターン数を超えたかどうか判定
     def is_finished(self) -> bool:
@@ -78,18 +78,34 @@ class Board():
     # 盤面の状態を表示する
     def show(self) -> None:
         print("何もない:. 先手の駒:o 後手の駒:x")
+        if self.start_first_move:
+            print("あなたは先手です.")
+        else:
+            print("あなたは後手です.")
         print('  0 1 2 3 4 5 6 7')
-        for i in range(8):
-            print(i, end=' ')
-            for j in range(8):
-                if self.board[i, j] == 0:
-                    print('.', end=' ')
-                elif self.board[i, j] == 1:
-                    print('o', end=' ')
-                elif self.board[i, j] == 2:
-                    print('x', end=' ')
-            print()
-        return
+        if self.start_first_move:
+            for i in range(8):
+                print(i, end=' ')
+                for j in range(8):
+                    if self.board[i, j] == 0:
+                        print('.', end=' ')
+                    elif self.board[i, j] == 1:
+                        print('o', end=' ')
+                    elif self.board[i, j] == 2:
+                        print('x', end=' ')
+                print()
+        else:
+            for i in range(8):
+                print(i, end=' ')
+                for j in range(8):
+                    if self.board[i, j] == 0:
+                        print('.', end=' ')
+                    elif self.board[i, j] == 1:
+                        print('x', end=' ')
+                    elif self.board[i, j] == 2:
+                        print('o', end=' ')
+                print()
+
     
     # それぞれの方向に対して何枚ひっくり返せるかを調べる
     # 座標はひっくり返せる方向を表すベクトル
@@ -132,3 +148,8 @@ class Board():
                 ans_list.append(((dy, dx), piece_num))
         return ans_list
 
+    # start next の数を返す
+    def count_pieces(self) -> tuple:
+        start_num = np.sum(self.board == 1)
+        next_num = np.sum(self.board == 2)
+        return start_num, next_num
